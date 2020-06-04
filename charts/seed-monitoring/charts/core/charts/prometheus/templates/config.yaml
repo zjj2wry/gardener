@@ -73,6 +73,31 @@ data:
         regex: true
         action: drop
     scrape_configs:
+    - job_name: tidb-monitor
+      metrics_path: /federate
+      params:
+        'match[]':
+        - '{job="tidb"}'
+        - '{job="tikv"}'
+        - '{job="pd"}'
+      tls_config:
+        # This is needed because the kubelets' certificates are not are generated
+        # for a specific pod IP
+        insecure_skip_verify: true
+        cert_file: /srv/kubernetes/prometheus-kubelet/prometheus-kubelet.crt
+        key_file: /srv/kubernetes/prometheus-kubelet/prometheus-kubelet.key
+      kubernetes_sd_configs:
+      - role: endpoints
+        api_server: https://kube-apiserver:443
+        tls_config:
+{{ include "prometheus.tls-config.kube-cert-auth" . | indent 10 }}
+      relabel_configs:
+      - source_labels:
+        - __meta_kubernetes_endpoints_name
+        - __meta_kubernetes_endpoint_port_name
+        regex: db-prometheus;http-prometheus
+        action: keep
+
     - job_name: kube-etcd3
       scheme: https
       tls_config:
@@ -220,11 +245,7 @@ data:
         target_label: container
         replacement: '${1}'
 {{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.cAdvisor | indent 6 }}
-      # We want to keep only metrics in kube-system namespace
-      - source_labels: [ namespace ]
-        action: keep
-        # systemd containers don't have namespaces
-        regex: (^$|^kube-system$)
+      # Keep metrics in all namespaces
       - source_labels:
         - container
         - __name__
@@ -247,10 +268,10 @@ data:
       static_configs:
       - targets:
         - prometheus-web.garden.svc
-      metric_relabel_configs:
+      # metric_relabel_configs:
       # we make the shoot's pods in the shoot's namespace to appear in as its in the kube-system
-      - target_label: namespace
-        replacement: kube-system
+      # - target_label: namespace
+        # replacement: kube-system
 
     - job_name: kube-state-metrics
       honor_labels: false
@@ -274,8 +295,8 @@ data:
         replacement: kube-state-metrics
       metric_relabel_configs:
       # we make the shoot's pods in the shoot's namepsace to apear in as its in the kube-system
-      - target_label: namespace
-        replacement: kube-system
+      # - target_label: namespace
+        # replacement: kube-system
       - source_labels: [ pod ]
         regex: ^.+\.tf-pod.+$
         action: drop
