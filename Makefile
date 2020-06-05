@@ -109,16 +109,16 @@ docker-push:
 	@if ! docker images $(SCHEDULER_IMAGE_REPOSITORY) | awk '{ print $$2 }' | grep -q -F $(IMAGE_TAG); then echo "$(SCHEDULER_IMAGE_REPOSITORY) version $(IMAGE_TAG) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(SEED_ADMISSION_IMAGE_REPOSITORY) | awk '{ print $$2 }' | grep -q -F $(IMAGE_TAG); then echo "$(SEED_ADMISSION_IMAGE_REPOSITORY) version $(IMAGE_TAG) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(GARDENLET_IMAGE_REPOSITORY) | awk '{ print $$2 }' | grep -q -F $(IMAGE_TAG); then echo "$(GARDENLET_IMAGE_REPOSITORY) version $(IMAGE_TAG) is not yet built. Please run 'make docker-images'"; false; fi
-	@gcloud docker -- push $(APISERVER_IMAGE_REPOSITORY):$(IMAGE_TAG)
-	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then gcloud docker -- push $(APISERVER_IMAGE_REPOSITORY):latest; fi
-	@gcloud docker -- push $(CONROLLER_MANAGER_IMAGE_REPOSITORY):$(IMAGE_TAG)
-	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then gcloud docker -- push $(CONROLLER_MANAGER_IMAGE_REPOSITORY):latest; fi
-	@gcloud docker -- push $(SCHEDULER_IMAGE_REPOSITORY):$(IMAGE_TAG)
-	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then gcloud docker -- push $(SCHEDULER_IMAGE_REPOSITORY):latest; fi
-	@gcloud docker -- push $(SEED_ADMISSION_IMAGE_REPOSITORY):$(IMAGE_TAG)
-	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then gcloud docker -- push $(SEED_ADMISSION_IMAGE_REPOSITORY):latest; fi
-	@gcloud docker -- push $(GARDENLET_IMAGE_REPOSITORY):$(IMAGE_TAG)
-	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then gcloud docker -- push $(GARDENLET_IMAGE_REPOSITORY):latest; fi
+	@docker push $(APISERVER_IMAGE_REPOSITORY):$(IMAGE_TAG)
+	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then docker push $(APISERVER_IMAGE_REPOSITORY):latest; fi
+	@docker push $(CONROLLER_MANAGER_IMAGE_REPOSITORY):$(IMAGE_TAG)
+	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then docker push $(CONROLLER_MANAGER_IMAGE_REPOSITORY):latest; fi
+	@docker push $(SCHEDULER_IMAGE_REPOSITORY):$(IMAGE_TAG)
+	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then docker push $(SCHEDULER_IMAGE_REPOSITORY):latest; fi
+	@docker push $(SEED_ADMISSION_IMAGE_REPOSITORY):$(IMAGE_TAG)
+	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then docker push $(SEED_ADMISSION_IMAGE_REPOSITORY):latest; fi
+	@docker push $(GARDENLET_IMAGE_REPOSITORY):$(IMAGE_TAG)
+	@if [[ "$(PUSH_LATEST_TAG)" == "true" ]]; then docker push $(GARDENLET_IMAGE_REPOSITORY):latest; fi
 
 #####################################################################
 # Rules for verification, formatting, linting, testing and cleaning #
