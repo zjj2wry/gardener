@@ -69,7 +69,6 @@ spec:
         - --port=8080
         - --telemetry-port=8081
         - --kubeconfig=/etc/kube-state-metrics/config/kubeconfig
-        - --namespace=kube-system
         - --collectors=daemonsets,deployments,nodes,pods,statefulsets
         volumeMounts:
         - name: kubeconfig
@@ -92,8 +91,8 @@ spec:
           timeoutSeconds: 5
         resources:
           requests:
-            cpu: 10m
-            memory: 32Mi
+            cpu: 80m
+            memory: 256Mi
       volumes:
       - name: kubeconfig
         secret:
