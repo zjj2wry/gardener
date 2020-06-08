@@ -50,7 +50,7 @@ key_file: /etc/prometheus/seed/prometheus.key
 {{- end -}}
 
 {{- define "prometheus.alertmanager.namespaces" -}}
-- garden
+- monitoring
 {{- if  (index .Values.rules.optional "alertmanager" ).enabled }}
 - {{ .Release.Namespace }}
 {{- end }}
