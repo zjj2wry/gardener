@@ -36,6 +36,18 @@ groups:
       description: There are no worker nodes in the cluster or all of the worker nodes in the cluster are not schedulable.
       summary: No nodes available. Possibly all workloads down.
 
+  - alert: KubeNodeNotReadyShoot
+    expr:  kube_node_status_condition{condition="Ready",status="false"} > 0
+    for: 10m
+    labels:
+      service: nodes
+      severity: critical
+      visibility: all
+      type: shoot
+    annotations:
+      description: Node {{ $labels.instance }} is not ready for more than 10m .
+      summary: Shoot node is in a notReady state
+
   - record: shoot:kube_node_status_capacity_cpu_cores:sum
     expr: sum(kube_node_status_capacity_cpu_cores)
 
