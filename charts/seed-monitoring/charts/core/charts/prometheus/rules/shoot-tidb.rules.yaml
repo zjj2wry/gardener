@@ -45,6 +45,28 @@ groups:
     annotations:
       description: There is at least one TiKV pod down for the past last 5 minutes.
       summary: TiKV has dead pod.
+  - alert: PDDown
+    expr: sum(up{exported_job="pd"}) by (kubernetes_namespace) == 0
+    for: 5m
+    labels:
+      service: shoot-pd-service
+      severity: critical
+      type: shoot
+      visibility: operator
+    annotations:
+      description: There are no running PD pods for the past last 5 minutes.
+      summary: PD is down
+  - alert: AtLeastOnePDPodDown
+    expr: sum(up{exported_job="pd"} != 1) by (kubernetes_namespace)
+    for: 5m
+    labels:
+      service: shoot-pd-service
+      severity: critical
+      type: shoot
+      visibility: operator
+    annotations:
+      description: There is at least one PD pod down for the past last 5 minutes.
+      summary: PD has dead pod.
   - alert: TiDBClusterKeepInitialing
     expr: sum(kube_pod_status_phase{pod=~"tidb.*-init.*"}) by (namespace) > 0 
     for: 15m
