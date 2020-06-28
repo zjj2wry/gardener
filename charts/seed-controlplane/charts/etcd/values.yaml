@@ -31,7 +31,8 @@ sidecar:
   port: 8080
   quota: 8Gi
   garbageCollectionPeriod: 12h
-  garbageCollectionPolicy: Exponential
+  garbageCollectionPolicy: LimitBased
+  maxBackups: 3
 # backup:
 #   provider: aws
 #   container: temp

@@ -60,6 +60,7 @@ spec:
     quota: {{ .Values.sidecar.quota }}
     garbageCollectionPolicy: {{ .Values.sidecar.garbageCollectionPolicy }}
     garbageCollectionPeriod: {{ .Values.sidecar.garbageCollectionPeriod }}
+    maxBackups: {{ .Values.sidecar.maxBackups }}
 {{- if .Values.sidecar.backup }}
     store:
       secretRef:
