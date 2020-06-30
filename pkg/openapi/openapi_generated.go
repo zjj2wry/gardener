@@ -5160,6 +5160,20 @@ func schema_pkg_apis_core_v1alpha1_ShootSpec(ref common.ReferenceCallback) commo
 							Format:      "",
 						},
 					},
+					"loadBalancerSourceRanges": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LoadBalancerSourceRanges is the loadBalancerSourceRange of shoot apiserver",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
 				},
 				Required: []string{"cloudProfileName", "kubernetes", "networking", "provider", "region", "secretBindingName"},
 			},
@@ -10233,6 +10247,20 @@ func schema_pkg_apis_core_v1beta1_ShootSpec(ref common.ReferenceCallback) common
 							Description: "SeedName is the name of the seed cluster that runs the control plane of the Shoot.",
 							Type:        []string{"string"},
 							Format:      "",
+						},
+					},
+					"loadBalancerSourceRanges": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LoadBalancerSourceRanges is the loadBalancerSourceRange of shoot apiserver",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
 						},
 					},
 				},

@@ -10,6 +10,8 @@ spec:
   selector:
     app: vpn-shoot
   type: LoadBalancer
+  loadBalancerSourceRanges:
+{{ toYaml .Values.loadBalancerSourceRanges | indent 4 }}
   ports:
   - name: openvpn
     protocol: TCP
