@@ -1511,6 +1511,18 @@ string
 <p>SeedName is the name of the seed cluster that runs the control plane of the Shoot.</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>loadBalancerSourceRanges</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>LoadBalancerSourceRanges is the loadBalancerSourceRange of shoot apiserver</p>
+</td>
+</tr>
 </table>
 </td>
 </tr>
@@ -6934,6 +6946,18 @@ string
 <td>
 <em>(Optional)</em>
 <p>SeedName is the name of the seed cluster that runs the control plane of the Shoot.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>loadBalancerSourceRanges</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>LoadBalancerSourceRanges is the loadBalancerSourceRange of shoot apiserver</p>
 </td>
 </tr>
 </tbody>

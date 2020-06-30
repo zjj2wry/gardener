@@ -80,6 +80,8 @@ type ShootSpec struct {
 	SecretBindingName string
 	// SeedName is the name of the seed cluster that runs the control plane of the Shoot.
 	SeedName *string
+	// LoadBalancerSourceRanges is the loadBalancerSourceRange of shoot apiserver
+	LoadBalancerSourceRanges []string
 }
 
 func (s *Shoot) GetProviderType() string {
