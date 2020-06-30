@@ -43,6 +43,7 @@ API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,SeedVolume,Providers
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,ShootList,Items
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,ShootSpec,Extensions
+API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,ShootSpec,LoadBalancerSourceRanges
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,ShootStateList,Items
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,ShootStateSpec,Extensions
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1alpha1,ShootStateSpec,Gardener
@@ -97,6 +98,7 @@ API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,SeedVolume,Providers
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,ShootList,Items
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,ShootSpec,Extensions
+API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,ShootSpec,LoadBalancerSourceRanges
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,ShootStatus,Conditions
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,ShootStatus,Constraints
 API rule violation: list_type_missing,github.com/gardener/gardener/pkg/apis/core/v1beta1,ShootStatus,LastErrors

@@ -58,3 +58,5 @@ vpn-shoot:
   podAnnotations: {}
   images:
     vpn-shoot: image-repository:image-tag
+  loadBalancerSourceRanges:
+    - 0.0.0.0/0

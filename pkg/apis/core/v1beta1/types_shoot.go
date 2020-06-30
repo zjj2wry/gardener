@@ -92,6 +92,9 @@ type ShootSpec struct {
 	// SeedName is the name of the seed cluster that runs the control plane of the Shoot.
 	// +optional
 	SeedName *string `json:"seedName,omitempty" protobuf:"bytes,14,opt,name=seedName"`
+	// LoadBalancerSourceRanges is the loadBalancerSourceRange of shoot apiserver
+	// +optional
+	LoadBalancerSourceRanges []string `json:"loadBalancerSourceRanges,omitempty" protobuf:"bytes,15,opt,name=loadBalancerSourceRanges"`
 }
 
 // ShootStatus holds the most recently observed status of the Shoot cluster.

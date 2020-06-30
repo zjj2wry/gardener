@@ -3902,6 +3902,7 @@ func autoConvert_v1beta1_ShootSpec_To_core_ShootSpec(in *ShootSpec, out *core.Sh
 	out.Region = in.Region
 	out.SecretBindingName = in.SecretBindingName
 	out.SeedName = (*string)(unsafe.Pointer(in.SeedName))
+	out.LoadBalancerSourceRanges = *(*[]string)(unsafe.Pointer(&in.LoadBalancerSourceRanges))
 	return nil
 }
 
@@ -3931,6 +3932,7 @@ func autoConvert_core_ShootSpec_To_v1beta1_ShootSpec(in *core.ShootSpec, out *Sh
 	out.Region = in.Region
 	out.SecretBindingName = in.SecretBindingName
 	out.SeedName = (*string)(unsafe.Pointer(in.SeedName))
+	out.LoadBalancerSourceRanges = *(*[]string)(unsafe.Pointer(&in.LoadBalancerSourceRanges))
 	return nil
 }
 

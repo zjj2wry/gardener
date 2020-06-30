@@ -670,7 +670,17 @@ func (b *Botanist) DeployNetworkPolicies(ctx context.Context) error {
 // DeployKubeAPIServerService deploys kube-apiserver service.
 func (b *Botanist) DeployKubeAPIServerService(ctx context.Context) error {
 	const name = "kube-apiserver-service"
-	return b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, name), b.Shoot.SeedNamespace, name)
+	return b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, name), b.Shoot.SeedNamespace, name, kubernetes.MergeFuncs{
+		corev1.SchemeGroupVersion.WithKind("Service").GroupKind(): func(newObj, oldObj *unstructured.Unstructured) {
+			oldRanges, found, _ := unstructured.NestedSlice(oldObj.Object, "spec", "loadBalancerSourceRanges")
+			// call default merge
+			kubernetes.DefaultServiceMergeFunc(newObj, oldObj)
+			// loadBalancerSourceRanges is controlled by other components, do not touch it so set it back
+			if found {
+				_ = unstructured.SetNestedSlice(newObj.Object, oldRanges, "spec", "loadBalancerSourceRanges")
+			}
+		},
+	})
 }
 
 // DeployKubeAPIServer deploys kube-apiserver deployment.

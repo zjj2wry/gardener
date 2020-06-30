@@ -155,6 +155,11 @@ func (c *Controller) runReconcileShootFlow(o *operation.Operation) *gardencorev1
 			Fn:           flow.TaskFn(botanist.WaitUntilInfrastructureReady),
 			Dependencies: flow.NewTaskIDs(deployInfrastructure),
 		})
+		deployAPIServerFirewall = g.Add(flow.Task{
+			Name:         "Deploying firewall for the shoot kube-apiserver",
+			Fn:           flow.TaskFn(botanist.DeployApiServerFirewall),
+			Dependencies: flow.NewTaskIDs(waitUntilInfrastructureReady),
+		})
 		_ = g.Add(flow.Task{
 			Name:         "Deploying network policies",
 			Fn:           flow.TaskFn(botanist.DeployNetworkPolicies).RetryUntilTimeout(defaultInterval, defaultTimeout),
@@ -283,7 +288,7 @@ func (c *Controller) runReconcileShootFlow(o *operation.Operation) *gardencorev1
 		deployWorker = g.Add(flow.Task{
 			Name:         "Configuring shoot worker pools",
 			Fn:           flow.TaskFn(botanist.DeployWorker).RetryUntilTimeout(defaultInterval, defaultTimeout),
-			Dependencies: flow.NewTaskIDs(deployCloudProviderSecret, waitUntilInfrastructureReady, initializeShootClients, computeShootOSConfig, waitUntilNetworkIsReady),
+			Dependencies: flow.NewTaskIDs(deployCloudProviderSecret, waitUntilInfrastructureReady, initializeShootClients, computeShootOSConfig, waitUntilNetworkIsReady, deployAPIServerFirewall),
 		})
 		waitUntilWorkerReady = g.Add(flow.Task{
 			Name:         "Waiting until shoot worker nodes have been reconciled",
