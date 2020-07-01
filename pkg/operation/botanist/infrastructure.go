@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
@@ -28,6 +29,7 @@ import (
 	"github.com/gardener/gardener/pkg/controllerutils"
 	"github.com/gardener/gardener/pkg/operation/common"
 	"github.com/gardener/gardener/pkg/utils/secrets"
+	errors2 "k8s.io/apimachinery/pkg/api/errors"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -139,6 +141,20 @@ func (b *Botanist) DeployApiServerFirewall(ctx context.Context) error {
 	var sourceRanges []string
 	if len(b.Shoot.Info.Spec.LoadBalancerSourceRanges) > 0 {
 		sourceRanges = append(sourceRanges, b.Shoot.Info.Spec.LoadBalancerSourceRanges...)
+
+		cm, err := b.K8sSeedClient.Kubernetes().CoreV1().ConfigMaps("kube-system").Get("vpc-outbound-ips", metav1.GetOptions{})
+		if err != nil && !errors2.IsNotFound(err) {
+			return err
+		}
+
+		// Add seed outbound ips, so that watchdog probing could success
+		if err == nil && len(cm.Data["ips"]) > 0 {
+			ipStr := cm.Data["ips"]
+			ipList := strings.Split(ipStr, " ")
+			for _, ip := range ipList {
+				sourceRanges = append(sourceRanges, fmt.Sprintf("%s/32", ip))
+			}
+		}
 	} else {
 		// use a safe default if the source ranges are not explicitly set
 		sourceRanges = append(sourceRanges, "0.0.0.0/0")
