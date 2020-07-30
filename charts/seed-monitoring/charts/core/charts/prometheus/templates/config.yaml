@@ -26,6 +26,8 @@ data:
         seed_provider: {{ .Values.seed.provider }}
         shoot_infra: {{ .Values.shoot.provider }}
         ignoreAlerts: {{ .Values.ignoreAlerts }}
+    remote_write:
+    - url: http://thanos-receive-external-url.monitoring/api/v1/receive
     rule_files:
     - /etc/prometheus/rules/*.yaml
     alerting:
