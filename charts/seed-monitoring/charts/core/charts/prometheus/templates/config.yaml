@@ -93,6 +93,7 @@ data:
         api_server: https://kube-apiserver:443
         tls_config:
 {{ include "prometheus.tls-config.kube-cert-auth" . | indent 10 }}
+      honor_labels: true
       relabel_configs:
       - source_labels:
         - __meta_kubernetes_endpoints_name
