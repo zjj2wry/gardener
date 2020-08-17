@@ -17,7 +17,7 @@ data:
       evaluation_interval: 1m
       scrape_interval: 1m
       external_labels:
-        cluster: {{ .Release.Namespace }}
+        cluster: shoot/{{ .Values.seed.provider }}/{{ .Values.seed.region }}/{{ .Release.Namespace }}
         project: {{ .Values.shoot.project }}
         shoot_name: {{ .Values.shoot.name }}
         name: {{ .Values.shoot.name }}
