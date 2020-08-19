@@ -715,7 +715,7 @@ func BootstrapCluster(k8sGardenClient kubernetes.Interface, seed *Seed, config *
 func DesiredExcessCapacity() int {
 	var (
 		replicasToSupportSingleShoot = 1
-		effectiveExcessCapacity      = 2
+		effectiveExcessCapacity      = 4
 	)
 
 	return effectiveExcessCapacity * replicasToSupportSingleShoot
