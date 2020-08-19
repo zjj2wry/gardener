@@ -1,11 +1,11 @@
 groups:
-- name: kube-apiserver.rules
+- name: apiserver.rules
   rules:
   - alert: ApiServerNotReachable
     expr: probe_success{job="blackbox-apiserver"} == 0
     for: 5m
     labels:
-      service: kube-apiserver
+      service: apiserver
       severity: blocker
       type: seed
       visibility: all
@@ -13,10 +13,10 @@ groups:
       description: "API server not reachable via external endpoint: {{ $labels.instance }}."
       summary: API server not reachable (externally).
   - alert: KubeApiserverDown
-    expr: absent(up{job="kube-apiserver"} == 1)
+    expr: absent(up{job="apiserver"} == 1)
     for: 5m
     labels:
-      service: kube-apiserver
+      service: apiserver
       severity: blocker
       type: seed
       visibility: operator
@@ -29,7 +29,7 @@ groups:
     expr: histogram_quantile(0.99, sum without (instance,resource) (apiserver_request_latencies_bucket{subresource!="log",verb!~"CONNECT|WATCHLIST|WATCH|PROXY proxy"})) / 1e6 > 3.0
     for: 30m
     labels:
-      service: kube-apiserver
+      service: apiserver
       severity: warning
       type: seed
       visibility: owner
@@ -50,10 +50,10 @@ groups:
     labels:
       quantile: "0.5"
   - alert: KubeApiServerTooManyOpenFileDescriptors
-    expr: 100 * process_open_fds{job="kube-apiserver"} / process_max_fds > 50
+    expr: 100 * process_open_fds{job="apiserver"} / process_max_fds > 50
     for: 30m
     labels:
-      service: kube-apiserver
+      service: apiserver
       severity: warning
       type: seed
       visibility: owner
@@ -61,10 +61,10 @@ groups:
       description: 'The API server ({{ $labels.instance }}) is using {{ $value }}% of the available file/socket descriptors.'
       summary: 'The API server has too many open file descriptors'
   - alert: KubeApiServerTooManyOpenFileDescriptors
-    expr: 100 * process_open_fds{job="kube-apiserver"} / process_max_fds{job="kube-apiserver"} > 80
+    expr: 100 * process_open_fds{job="apiserver"} / process_max_fds{job="apiserver"} > 80
     for: 30m
     labels:
-      service: kube-apiserver
+      service: apiserver
       severity: critical
       type: seed
       visibility: owner
@@ -78,11 +78,11 @@ groups:
     labels:
       severity: critical
       type: seed
-      job: kube-apiserver
+      job: apiserver
       visibility: operator
     annotations:
         description: 'The API servers cumulative failure rate in logging audit events is {{ printf "%0.2f" $value }}%. This may be caused by an unavailable/unreachable audisink(s) and/or improper API server audit configuration.'
         summary: 'The API server has too many failed attempts to log audit events'
 
   - record: shoot:kube_apiserver:sum_by_pod
-    expr: sum(up{job="kube-apiserver"}) by (pod)
+    expr: sum(up{job="apiserver"}) by (pod)
