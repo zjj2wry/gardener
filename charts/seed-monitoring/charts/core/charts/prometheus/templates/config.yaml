@@ -197,8 +197,6 @@ data:
       - source_labels: [ __meta_kubernetes_pod_name ]
         target_label: pod
       metric_relabel_configs:
-# allow all apiserver metrics to keep consistency with coreos/kube-prometheus       
-# {{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.kubeAPIServer | indent 6 }}
       {{- if semverCompare "< 1.14" .Values.kubernetesVersion }}
       - source_labels: [ __name__ ]
         regex: ^apiserver_request_count$
@@ -324,8 +322,6 @@ data:
       - source_labels: [ pod ]
         regex: ^.+\.tf-pod.+$
         action: drop
-# allow all kube-state-metrics to keep consistency with coreos/kube-prometheus       
-# {{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.kubeStateMetrics | indent 6 }}
 
     - job_name: 'annotated-seed-service-endpoints'
       honor_labels: false
@@ -500,9 +496,6 @@ data:
         target_label: pod
       - source_labels: [ __meta_kubernetes_pod_node_name ]
         target_label: node
-# allow all node-exporter metrics to keep consistency with coreos/kube-prometheus      
-#       metric_relabel_configs:
-# {{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.nodeExporter | indent 6 }}
 
     - job_name: kube-proxy
       honor_labels: false
