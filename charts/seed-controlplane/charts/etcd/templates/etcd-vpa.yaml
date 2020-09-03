@@ -2,7 +2,7 @@
 apiVersion: "autoscaling.k8s.io/v1beta2"
 kind: VerticalPodAutoscaler
 metadata:
-  name: etcd-vpa
+  name: etcd-{{ .Values.role }}-vpa
   namespace: {{ .Release.Namespace }}
 spec:
   targetRef:

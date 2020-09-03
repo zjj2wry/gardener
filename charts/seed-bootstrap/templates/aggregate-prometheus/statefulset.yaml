@@ -14,6 +14,7 @@ spec:
       app: aggregate-prometheus
       role: monitoring
   serviceName: aggregate-prometheus
+  replicas: 0
   template:
     metadata:
       labels:
@@ -22,7 +23,6 @@ spec:
     spec:
       # used to talk to Seed's API server.
       serviceAccountName: aggregate-prometheus
-      replicas: 0
       containers:
       - name: prometheus
         image: {{ index .Values.global.images "prometheus" }}
