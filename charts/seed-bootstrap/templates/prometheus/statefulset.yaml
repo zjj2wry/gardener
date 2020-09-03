@@ -20,6 +20,7 @@ spec:
         app: prometheus
         role: monitoring
     spec:
+      replicas: 0
       # used to talk to Seed's API server.
       serviceAccountName: prometheus
       containers:

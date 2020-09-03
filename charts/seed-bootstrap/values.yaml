@@ -2,11 +2,11 @@ cloudProvider: aws
 
 prometheus:
   port: 9090
-  storage: 10Gi
+  storage: 2Gi
 
 aggregatePrometheus:
   port: 9090
-  storage: 20Gi
+  storage: 2Gi
   seed: seed
   hostName: p.seed-1.example.com
   secretName: prometheus-tls
@@ -211,9 +211,9 @@ gardenerResourceManager:
 gardenerSeedAdmissionController:
   resources:
     requests:
-      cpu: 100m
+      cpu: 10m
       memory: 50Mi
     limits:
       cpu: 200m
       memory: 100Mi
-  replicas: 3
+  replicas: 2

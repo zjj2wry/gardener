@@ -9,7 +9,7 @@ metadata:
     component: grafana
 spec:
   revisionHistoryLimit: 0
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       component: grafana
