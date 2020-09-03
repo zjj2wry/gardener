@@ -17,6 +17,6 @@ spec:
     kind: Deployment
     name: gardener-apiserver
   updatePolicy:
-    updateMode: Auto
+    updateMode: Initial
 {{- end }}
 {{- end }}

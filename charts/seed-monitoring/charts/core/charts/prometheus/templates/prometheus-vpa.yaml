@@ -9,7 +9,7 @@ spec:
     kind: StatefulSet
     name: prometheus
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "Initial"
   resourcePolicy:
     containerPolicies:
     # Due to CVE-2019-5736 runC is initially loaded into memory when the container starts.

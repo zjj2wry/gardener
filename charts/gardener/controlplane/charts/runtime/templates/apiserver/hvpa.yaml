@@ -25,10 +25,10 @@ spec:
     deploy: true
     scaleUp:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
     scaleDown:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
     template:
       metadata:
         labels:
@@ -52,13 +52,13 @@ spec:
     deploy: true
     scaleUp:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
 {{- if .Values.global.apiserver.hvpa.vpaScaleUpStabilization }}
 {{ toYaml .Values.global.apiserver.hvpa.vpaScaleUpStabilization | indent 6 }}
 {{- end }}
     scaleDown:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
 {{- if .Values.global.apiserver.hvpa.vpaScaleDownStabilization }}
 {{ toYaml .Values.global.apiserver.hvpa.vpaScaleDownStabilization | indent 6 }}
 {{- end }}

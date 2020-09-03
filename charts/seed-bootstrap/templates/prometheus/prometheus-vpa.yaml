@@ -9,4 +9,4 @@ spec:
     kind: StatefulSet
     name: prometheus
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "Initial"

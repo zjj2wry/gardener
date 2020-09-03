@@ -44,7 +44,7 @@ spec:
     deploy: true
     scaleUp:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
 {{- if .Values.hvpa.scaleUpStabilization }}
 {{ toYaml .Values.hvpa.scaleUpStabilization | indent 6 }}
 {{- end }}

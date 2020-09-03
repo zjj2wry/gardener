@@ -10,5 +10,5 @@ spec:
     kind: Deployment
     name: gardenlet
   updatePolicy:
-    updateMode: Auto
+    updateMode: Initial
 {{- end }}

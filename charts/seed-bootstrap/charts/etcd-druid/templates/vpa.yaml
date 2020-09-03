@@ -10,4 +10,5 @@ spec:
     kind: Deployment
     name: etcd-druid
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "Initial"
+  controlledValues: "RequestsOnly"

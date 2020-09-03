@@ -19,10 +19,10 @@ spec:
     deploy: true
     scaleUp:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
     scaleDown:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
     template:
       metadata:
         labels:
@@ -48,13 +48,13 @@ spec:
     deploy: true
     scaleUp:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
 {{- if .Values.scaleUpStabilization }}
 {{ toYaml .Values.scaleUpStabilization | indent 6 }}
 {{- end }}
     scaleDown:
       updatePolicy:
-        updateMode: "Auto"
+        updateMode: "Initial"
 {{- if .Values.scaleDownStabilization }}
 {{ toYaml .Values.scaleDownStabilization | indent 6 }}
 {{- end }}

@@ -1,14 +1,15 @@
-{{ if .Values.vpa.enabled }}
+{{ if not .Values.hvpa.enabled }}
 apiVersion: "autoscaling.k8s.io/v1beta2"
 kind: VerticalPodAutoscaler
 metadata:
-  name: aggregate-prometheus-vpa
+  name: etcd-vpa
   namespace: {{ .Release.Namespace }}
 spec:
   targetRef:
-    apiVersion: {{ include "statefulsetversion" . }}
+    apiVersion:  {{ include "statefulsetversion" . }}
     kind: StatefulSet
-    name: aggregate-prometheus
+    name: etcd-{{ .Values.role }}
   updatePolicy:
     updateMode: "Initial"
+  controlledValues: "RequestsOnly"
 {{ end }}

@@ -579,31 +579,31 @@ func getResourcesForAPIServer(nodeCount int32, scalingClass string) (string, str
 
 	switch {
 	case scalingClass == "small":
-		cpuRequest = "800m"
+		cpuRequest = "400m"
 		memoryRequest = "800Mi"
 
 		cpuLimit = "1000m"
 		memoryLimit = "1200Mi"
 	case scalingClass == "medium":
-		cpuRequest = "1000m"
+		cpuRequest = "500m"
 		memoryRequest = "1100Mi"
 
 		cpuLimit = "1200m"
 		memoryLimit = "1900Mi"
 	case scalingClass == "large":
-		cpuRequest = "1200m"
+		cpuRequest = "600m"
 		memoryRequest = "1600Mi"
 
 		cpuLimit = "1500m"
 		memoryLimit = "3900Mi"
 	case scalingClass == "xlarge":
-		cpuRequest = "2500m"
+		cpuRequest = "1000m"
 		memoryRequest = "5200Mi"
 
 		cpuLimit = "3000m"
 		memoryLimit = "5900Mi"
 	case scalingClass == "2xlarge":
-		cpuRequest = "3000m"
+		cpuRequest = "1500m"
 		memoryRequest = "5200Mi"
 
 		cpuLimit = "4000m"
@@ -1175,6 +1175,11 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 			hvpaValues["minAllowed"] = map[string]interface{}{
 				"cpu":    "50m",
 				"memory": "200M",
+			}
+			etcdValues["resources"] = map[string]interface{}{
+				"requests": map[string]interface{}{
+					"cpu": "100m",
+				},
 			}
 		}
 

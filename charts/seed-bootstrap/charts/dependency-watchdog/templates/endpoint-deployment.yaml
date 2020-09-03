@@ -63,4 +63,4 @@ spec:
     kind: Deployment
     name: dependency-watchdog-endpoint
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "Initial"

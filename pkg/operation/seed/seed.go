@@ -625,7 +625,7 @@ func BootstrapCluster(k8sGardenClient kubernetes.Interface, seed *Seed, config *
 		},
 		"reserveExcessCapacity": seed.reserveExcessCapacity,
 		"replicas": map[string]interface{}{
-			"reserve-excess-capacity": DesiredExcessCapacity(),
+			"reserve-excess-capacity": 0,
 		},
 		"prometheus": map[string]interface{}{
 			"storage": seed.GetValidVolumeSize("10Gi"),

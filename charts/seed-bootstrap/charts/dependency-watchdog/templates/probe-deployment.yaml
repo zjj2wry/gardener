@@ -65,4 +65,4 @@ spec:
     kind: Deployment
     name: dependency-watchdog-probe
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "Initial"

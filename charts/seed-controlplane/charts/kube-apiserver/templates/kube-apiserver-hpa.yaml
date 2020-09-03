@@ -18,9 +18,10 @@ spec:
     resource:
       name: cpu
       targetAverageUtilization: {{ .Values.hpa.targetAverageUtilizationCpu }}
-  - type: Resource
-    resource:
-      name: memory
-      targetAverageUtilization: {{ .Values.hpa.targetAverageUtilizationMemory }}
+{{/* Disable memory calculation which is meaningless */}}
+{{/*  - type: Resource*/}}
+{{/*    resource:*/}}
+{{/*      name: memory*/}}
+{{/*      targetAverageUtilization: {{ .Values.hpa.targetAverageUtilizationMemory }}*/}}
 {{- end }}
 {{ end }}
