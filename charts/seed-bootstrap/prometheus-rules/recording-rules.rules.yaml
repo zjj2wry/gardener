@@ -297,9 +297,9 @@ groups:
   - record: seed:kube_pod_status_phase:sum_by_phase
     expr: sum(kube_pod_status_phase) by (phase)
 
-  # Recording rules for reserve excess capacity pod count by phase for the entire seed
-  - record: seed:kube_pod_status_phase_reserve_excess_capacity:sum_by_phase
-    expr: sum(kube_pod_status_phase{pod=~"reserve-excess-capacity.*"}) by (phase)
+#  # Recording rules for reserve excess capacity pod count by phase for the entire seed
+#  - record: seed:kube_pod_status_phase_reserve_excess_capacity:sum_by_phase
+#    expr: sum(kube_pod_status_phase{pod=~"reserve-excess-capacity.*"}) by (phase)
 
   # Recording rules for images running on seed
   - record: seed:images:count
