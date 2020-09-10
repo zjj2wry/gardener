@@ -13,17 +13,17 @@ groups:
       summary: Kube-state-metrics for shoot cluster metrics is down.
       description: There are no running kube-state-metric pods for the shoot cluster. No kubernetes resource metrics can be scraped.
 
-  - alert: KubeStateMetricsSeedDown
-    expr: absent(up{job="kube-state-metrics", type="seed"} == 1)
-    for: 5m
-    labels:
-      service: kube-state-metrics-seed
-      severity: critical
-      visibility: operator
-      type: seed
-    annotations:
-      summary: Kube-state-metrics for seed cluster metrics is down.
-      description: There are no running kube-state-metric pods for the seed cluster. No kubernetes resource metrics can be scraped.
+#  - alert: KubeStateMetricsSeedDown
+#    expr: absent(up{job="kube-state-metrics", type="seed"} == 1)
+#    for: 5m
+#    labels:
+#      service: kube-state-metrics-seed
+#      severity: critical
+#      visibility: operator
+#      type: seed
+#    annotations:
+#      summary: Kube-state-metrics for seed cluster metrics is down.
+#      description: There are no running kube-state-metric pods for the seed cluster. No kubernetes resource metrics can be scraped.
 
   - alert: NoWorkerNodes
     expr: sum(kube_node_spec_unschedulable) == count(kube_node_info) or absent(kube_node_info)
