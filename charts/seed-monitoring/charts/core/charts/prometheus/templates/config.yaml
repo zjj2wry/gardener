@@ -280,21 +280,6 @@ data:
       - regex: ^id$
         action: labeldrop
 
-    # We fetch kubelet metrics from seed's kube-system Prometheus and filter
-    # the metrics in shoot's namespace
-    - job_name: kube-kubelet-seed
-      metrics_path: /federate
-      params:
-        'match[]':
-        - '{namespace="{{ .Release.Namespace }}"}'
-      static_configs:
-      - targets:
-        - prometheus-web.garden.svc
-      # metric_relabel_configs:
-      # we make the shoot's pods in the shoot's namespace to appear in as its in the kube-system
-      # - target_label: namespace
-        # replacement: kube-system
-
     - job_name: kube-state-metrics
       honor_labels: false
       # Service is used, because we only care about metric from one kube-state-metrics instance
@@ -437,7 +422,7 @@ data:
 {{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.alertManager | indent 6 }}
 {{- end }}
 
-    - job_name: prometheus
+    - job_name: prometheus-k8s
       honor_labels: false
       kubernetes_sd_configs:
       - role: endpoints
