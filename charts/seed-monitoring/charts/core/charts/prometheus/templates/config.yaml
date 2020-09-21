@@ -226,6 +226,12 @@ data:
         regex: __meta_kubernetes_node_label_(.+)
       - target_label: type
         replacement: shoot
+      - source_labels: [__metrics_path__]
+        separator: ;
+        regex: (.*)
+        target_label: metrics_path
+        replacement: $1
+        action: replace
       # get system services
       # metric_relabel_configs:
       # - source_labels: [ __name__ ]
