@@ -28,6 +28,17 @@ data:
         ignoreAlerts: {{ .Values.ignoreAlerts }}
     remote_write:
     - url: http://thanos-receive-external-url.monitoring/api/v1/receive
+    # Configures the queue used to write to remote storage.
+      queue_config:
+        # Number of samples to buffer per shard before we block reading of more
+        # samples from the WAL. It is recommended to have enough capacity in each
+        # shard to buffer several requests to keep throughput up while processing
+        # occasional slow remote requests.
+        capacity: 2500
+        # Maximum number of shards, i.e. amount of concurrency.
+        max_shards: 200
+        # Maximum number of samples per send.
+        max_samples_per_send: 500
     rule_files:
     - /etc/prometheus/rules/*.yaml
     alerting:
@@ -445,8 +456,6 @@ data:
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels: [ __meta_kubernetes_pod_name ]
         target_label: pod
-      metric_relabel_configs:
-{{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.prometheus | indent 6 }}
 
     - job_name: coredns
       honor_labels: false
@@ -653,28 +662,6 @@ data:
       - source_labels: [ namespace ]
         action: keep
         regex: ^{{ .Release.Namespace }}$
-{{- end }}
-
-{{- if  (index .Values.rules.optional "elasticsearch" ).enabled }}
-    - job_name: elasticsearch-logging
-      honor_labels: false
-      kubernetes_sd_configs:
-      - role: endpoints
-        namespaces:
-          names: [{{ .Release.Namespace }}]
-      relabel_configs:
-      - source_labels:
-        - __meta_kubernetes_service_name
-        - __meta_kubernetes_endpoint_port_name
-        action: keep
-        regex: elasticsearch-logging;metrics
-      # common metrics
-      - action: labelmap
-        regex: __meta_kubernetes_service_label_(.+)
-      - source_labels: [ __meta_kubernetes_pod_name ]
-        target_label: pod
-      metric_relabel_configs:
-{{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.elasticsearch | indent 6 }}
 {{- end }}
 
 {{- if .Values.extensions.scrapeConfigs }}
