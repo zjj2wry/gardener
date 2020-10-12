@@ -93,6 +93,7 @@ data:
         - '{job="tidb"}'
         - '{job="tikv"}'
         - '{job="pd"}'
+        - '{job="tiflash"}'
       tls_config:
         # This is needed because the kubelets' certificates are not are generated
         # for a specific pod IP
