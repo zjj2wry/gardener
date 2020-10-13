@@ -88,6 +88,7 @@ data:
     scrape_configs:
     - job_name: tidb-monitor
       metrics_path: /federate
+      scrape_timeout: 30s
       params:
         'match[]':
         - '{job="tidb"}'
