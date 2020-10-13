@@ -14,8 +14,8 @@ data:
     # take note that there is a limit of 500 samples per target
 
     global:
-      evaluation_interval: 1m
-      scrape_interval: 1m
+      evaluation_interval: 30s
+      scrape_interval: 30s
       external_labels:
         cluster: shoot/{{ .Values.seed.provider }}/{{ .Values.seed.region }}/{{ .Release.Namespace }}
         project: {{ .Values.shoot.project }}
@@ -499,8 +499,12 @@ data:
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels: [ __meta_kubernetes_pod_name ]
         target_label: pod
-      - source_labels: [ __meta_kubernetes_pod_node_name ]
-        target_label: node
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        separator: ;
+        regex: (.*)
+        target_label: instance
+        replacement: $1
+        action: replace
 
     - job_name: kube-proxy
       honor_labels: false
