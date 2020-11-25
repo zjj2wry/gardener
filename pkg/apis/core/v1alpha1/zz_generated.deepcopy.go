@@ -3226,6 +3226,11 @@ func (in *ShootStatus) DeepCopyInto(out *ShootStatus) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.InfrastructureProviderStatus != nil {
+		in, out := &in.InfrastructureProviderStatus, &out.InfrastructureProviderStatus
+		*out = new(runtime.RawExtension)
+		(*in).DeepCopyInto(*out)
+	}
 	return
 }
 

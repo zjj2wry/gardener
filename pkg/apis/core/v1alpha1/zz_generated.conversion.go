@@ -4196,6 +4196,7 @@ func autoConvert_v1alpha1_ShootStatus_To_core_ShootStatus(in *ShootStatus, out *
 	// WARNING: in.Seed requires manual conversion: does not exist in peer-type
 	out.TechnicalID = in.TechnicalID
 	out.UID = types.UID(in.UID)
+	out.InfrastructureProviderStatus = (*runtime.RawExtension)(unsafe.Pointer(in.InfrastructureProviderStatus))
 	return nil
 }
 
@@ -4213,6 +4214,7 @@ func autoConvert_core_ShootStatus_To_v1alpha1_ShootStatus(in *core.ShootStatus, 
 	// WARNING: in.SeedName requires manual conversion: does not exist in peer-type
 	out.TechnicalID = in.TechnicalID
 	out.UID = types.UID(in.UID)
+	out.InfrastructureProviderStatus = (*runtime.RawExtension)(unsafe.Pointer(in.InfrastructureProviderStatus))
 	return nil
 }
 
