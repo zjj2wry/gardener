@@ -3955,6 +3955,7 @@ func autoConvert_v1beta1_ShootStatus_To_core_ShootStatus(in *ShootStatus, out *c
 	out.SeedName = (*string)(unsafe.Pointer(in.SeedName))
 	out.TechnicalID = in.TechnicalID
 	out.UID = types.UID(in.UID)
+	out.InfrastructureProviderStatus = (*runtime.RawExtension)(unsafe.Pointer(in.InfrastructureProviderStatus))
 	return nil
 }
 
@@ -3977,6 +3978,7 @@ func autoConvert_core_ShootStatus_To_v1beta1_ShootStatus(in *core.ShootStatus, o
 	out.SeedName = (*string)(unsafe.Pointer(in.SeedName))
 	out.TechnicalID = in.TechnicalID
 	out.UID = types.UID(in.UID)
+	out.InfrastructureProviderStatus = (*runtime.RawExtension)(unsafe.Pointer(in.InfrastructureProviderStatus))
 	return nil
 }
 
