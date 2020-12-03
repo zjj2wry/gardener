@@ -1231,6 +1231,8 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 		values["sidecar"] = sidecarValues
 		values["hvpa"] = hvpaValues
 
+		// TODO(zhengjiajin): set roleID to service account annotations
+
 		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values)); err != nil {
 			return err
 		}
