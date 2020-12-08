@@ -61,7 +61,7 @@ type GardenletConfiguration struct {
 	// this gardenlet instance. In this case the `Seed` object is not managed by the Gardenlet and must
 	// be created by an operator/administrator.
 	SeedSelector *metav1.LabelSelector
-	// OverrideHelmValues used add extra helm values for all component managed by gardenlet.
+	// OverrideHelmValues used for add extra helm values for all component managed by gardenlet.
 	// for example
 	// "etcd":
 	//   "serviceAccountAnnoations":
