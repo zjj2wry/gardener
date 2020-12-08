@@ -61,6 +61,12 @@ type GardenletConfiguration struct {
 	// this gardenlet instance. In this case the `Seed` object is not managed by the Gardenlet and must
 	// be created by an operator/administrator.
 	SeedSelector *metav1.LabelSelector
+	// OverrideHelmValues used add extra helm values for all component managed by gardenlet.
+	// for example
+	// "etcd":
+	//   "serviceAccountAnnoations":
+	//     "eks.amazonaws.com/role-arn": "<aws role ID>"
+	OverrideHelmValues map[string]interface{}
 }
 
 // GardenClientConnection specifies the kubeconfig file and the client connection settings

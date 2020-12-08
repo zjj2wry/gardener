@@ -1231,7 +1231,7 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 		values["sidecar"] = sidecarValues
 		values["hvpa"] = hvpaValues
 
-		// TODO(zhengjiajin): set roleID to service account annotations
+		b.OverrideHelmValues(values)
 
 		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values)); err != nil {
 			return err
@@ -1239,6 +1239,20 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (b *Botanist) OverrideHelmValues(values map[string]interface{}) {
+	overrideValues, ok := b.Config.OverrideHelmValues["etcd"]
+	if ok {
+		if overrideValues != nil {
+			overrideValuesMap, ok := overrideValues.(map[string]interface{})
+			if ok {
+				for k, v := range overrideValuesMap {
+					values[k] = v
+				}
+			}
+		}
+	}
 }
 
 // CheckVPNConnection checks whether the VPN connection between the control plane and the shoot networks

@@ -15,6 +15,11 @@
 package botanist
 
 import (
+	"testing"
+
+	"github.com/gardener/gardener/pkg/gardenlet/apis/config"
+	"github.com/gardener/gardener/pkg/operation"
+	"github.com/google/go-cmp/cmp"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
@@ -133,3 +138,57 @@ var _ = Describe("controlplane", func() {
 	)
 
 })
+
+func TestOverrideHelmValues(t *testing.T) {
+	testCases := []struct {
+		name         string
+		input        *Botanist
+		inputValues  map[string]interface{}
+		expectValues map[string]interface{}
+	}{
+		{
+			name: "override helm values is null",
+			input: &Botanist{
+				Operation: &operation.Operation{
+					Config: &config.GardenletConfiguration{},
+				},
+			},
+			inputValues:  map[string]interface{}{},
+			expectValues: map[string]interface{}{},
+		},
+		{
+			name: "add extra annotations to etcd service account",
+			input: &Botanist{
+				Operation: &operation.Operation{
+					Config: &config.GardenletConfiguration{
+						OverrideHelmValues: map[string]interface{}{
+							"etcd": map[string]interface{}{
+								"serviceAccountAnnotations": map[string]interface{}{
+									"eks.amazonaws.com/role-arn": "role-id",
+								},
+							},
+						},
+					},
+				},
+			},
+			inputValues: map[string]interface{}{
+				"etcd": "i am etcd, hahaha...",
+			},
+			expectValues: map[string]interface{}{
+				"etcd": "i am etcd, hahaha...",
+				"serviceAccountAnnotations": map[string]interface{}{
+					"eks.amazonaws.com/role-arn": "role-id",
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			testCase.input.OverrideHelmValues(testCase.inputValues)
+			if diff := cmp.Diff(testCase.inputValues, testCase.expectValues); diff != "" {
+				t.Fatalf("diff: %s", diff)
+			}
+		})
+	}
+}
