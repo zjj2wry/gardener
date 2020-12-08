@@ -185,7 +185,7 @@ func TestOverrideHelmValues(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			testCase.input.OverrideHelmValues(testCase.inputValues)
+			testCase.input.OverrideHelmValues("etcd", testCase.inputValues)
 			if diff := cmp.Diff(testCase.inputValues, testCase.expectValues); diff != "" {
 				t.Fatalf("diff: %s", diff)
 			}

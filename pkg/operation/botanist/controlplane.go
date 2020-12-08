@@ -1231,7 +1231,7 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 		values["sidecar"] = sidecarValues
 		values["hvpa"] = hvpaValues
 
-		b.OverrideHelmValues(values)
+		b.OverrideHelmValues("etcd", values)
 
 		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values)); err != nil {
 			return err
@@ -1241,8 +1241,8 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 	return nil
 }
 
-func (b *Botanist) OverrideHelmValues(values map[string]interface{}) {
-	overrideValues, ok := b.Config.OverrideHelmValues["etcd"]
+func (b *Botanist) OverrideHelmValues(name string, values map[string]interface{}) {
+	overrideValues, ok := b.Config.OverrideHelmValues[name]
 	if ok {
 		if overrideValues != nil {
 			overrideValuesMap, ok := overrideValues.(map[string]interface{})
