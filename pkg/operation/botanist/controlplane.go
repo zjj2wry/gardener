@@ -28,6 +28,7 @@ import (
 	"github.com/gardener/gardener/pkg/client/kubernetes"
 	"github.com/gardener/gardener/pkg/features"
 	gardenletfeatures "github.com/gardener/gardener/pkg/gardenlet/features"
+	"github.com/gardener/gardener/pkg/logger"
 	"github.com/gardener/gardener/pkg/operation/common"
 	"github.com/gardener/gardener/pkg/utils"
 	"github.com/gardener/gardener/pkg/utils/flow"
@@ -1231,9 +1232,9 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 		values["sidecar"] = sidecarValues
 		values["hvpa"] = hvpaValues
 
-		b.OverrideHelmValues("etcd", values)
+		overrideValues := b.OverrideHelmValues("etcd")
 
-		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values)); err != nil {
+		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values), kubernetes.Values(overrideValues)); err != nil {
 			return err
 		}
 	}
@@ -1241,18 +1242,20 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 	return nil
 }
 
-func (b *Botanist) OverrideHelmValues(name string, values map[string]interface{}) {
-	overrideValues, ok := b.Config.OverrideHelmValues[name]
-	if ok {
-		if overrideValues != nil {
-			overrideValuesMap, ok := overrideValues.(map[string]interface{})
-			if ok {
-				for k, v := range overrideValuesMap {
-					values[k] = v
-				}
-			}
-		}
+func (b *Botanist) OverrideHelmValues(name string) map[string]interface{} {
+	logger := logrus.NewEntry(logger.NewNopLogger())
+
+	emptyValues := make(map[string]interface{})
+	values, ok := b.Config.OverrideHelmValues[name]
+	if !ok {
+		return emptyValues
 	}
+	overrideValues, ok := values.(map[string]interface{})
+	if !ok {
+		logger.Warnf("invalid override helm values in gardenlet config, values: %v", values)
+		return emptyValues
+	}
+	return overrideValues
 }
 
 // CheckVPNConnection checks whether the VPN connection between the control plane and the shoot networks

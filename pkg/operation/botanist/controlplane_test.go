@@ -140,10 +140,10 @@ var _ = Describe("controlplane", func() {
 })
 
 func TestOverrideHelmValues(t *testing.T) {
+	emptyValues := make(map[string]interface{})
 	testCases := []struct {
 		name         string
 		input        *Botanist
-		inputValues  map[string]interface{}
 		expectValues map[string]interface{}
 	}{
 		{
@@ -153,8 +153,20 @@ func TestOverrideHelmValues(t *testing.T) {
 					Config: &config.GardenletConfiguration{},
 				},
 			},
-			inputValues:  map[string]interface{}{},
-			expectValues: map[string]interface{}{},
+			expectValues: emptyValues,
+		},
+		{
+			name: "override helm values is not map",
+			input: &Botanist{
+				Operation: &operation.Operation{
+					Config: &config.GardenletConfiguration{
+						OverrideHelmValues: map[string]interface{}{
+							"etcd": "i am string",
+						},
+					},
+				},
+			},
+			expectValues: emptyValues,
 		},
 		{
 			name: "add extra annotations to etcd service account",
@@ -171,11 +183,7 @@ func TestOverrideHelmValues(t *testing.T) {
 					},
 				},
 			},
-			inputValues: map[string]interface{}{
-				"etcd": "i am etcd, hahaha...",
-			},
 			expectValues: map[string]interface{}{
-				"etcd": "i am etcd, hahaha...",
 				"serviceAccountAnnotations": map[string]interface{}{
 					"eks.amazonaws.com/role-arn": "role-id",
 				},
@@ -185,8 +193,8 @@ func TestOverrideHelmValues(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			testCase.input.OverrideHelmValues("etcd", testCase.inputValues)
-			if diff := cmp.Diff(testCase.inputValues, testCase.expectValues); diff != "" {
+			overrideValues := testCase.input.OverrideHelmValues("etcd")
+			if diff := cmp.Diff(overrideValues, testCase.expectValues); diff != "" {
 				t.Fatalf("diff: %s", diff)
 			}
 		})
