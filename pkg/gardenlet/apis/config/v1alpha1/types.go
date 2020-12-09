@@ -18,9 +18,9 @@ import (
 	"time"
 
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	componentbaseconfigv1alpha1 "k8s.io/component-base/config/v1alpha1"
 	"k8s.io/klog"
 )
@@ -72,6 +72,13 @@ type GardenletConfiguration struct {
 	// be created by an operator/administrator.
 	// +optional
 	SeedSelector *metav1.LabelSelector `json:"seedSelector,omitempty"`
+	// OverrideHelmValues used for add extra helm values for all component managed by gardenlet.
+	// for example
+	// kind: HelmValues
+	// etcd:
+	//   serviceAccountAnnoations:
+	//     "eks.amazonaws.com/role-arn": "<aws role ID>"
+	OverrideHelmValues *unstructured.Unstructured `json:"overrideHelmValues,omitempty"`
 }
 
 // GardenClientConnection specifies the kubeconfig file and the client connection settings

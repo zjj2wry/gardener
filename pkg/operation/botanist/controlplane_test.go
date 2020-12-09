@@ -23,6 +23,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	auditv1 "k8s.io/apiserver/pkg/apis/audit/v1"
 	auditv1alpha1 "k8s.io/apiserver/pkg/apis/audit/v1alpha1"
@@ -160,8 +161,10 @@ func TestOverrideHelmValues(t *testing.T) {
 			input: &Botanist{
 				Operation: &operation.Operation{
 					Config: &config.GardenletConfiguration{
-						OverrideHelmValues: map[string]interface{}{
-							"etcd": "i am string",
+						OverrideHelmValues: &unstructured.Unstructured{
+							Object: map[string]interface{}{
+								"etcd": "i am string",
+							},
 						},
 					},
 				},
@@ -173,10 +176,12 @@ func TestOverrideHelmValues(t *testing.T) {
 			input: &Botanist{
 				Operation: &operation.Operation{
 					Config: &config.GardenletConfiguration{
-						OverrideHelmValues: map[string]interface{}{
-							"etcd": map[string]interface{}{
-								"serviceAccountAnnotations": map[string]interface{}{
-									"eks.amazonaws.com/role-arn": "role-id",
+						OverrideHelmValues: &unstructured.Unstructured{
+							Object: map[string]interface{}{
+								"etcd": map[string]interface{}{
+									"serviceAccountAnnotations": map[string]interface{}{
+										"eks.amazonaws.com/role-arn": "role-id",
+									},
 								},
 							},
 						},

@@ -1233,8 +1233,9 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 		values["hvpa"] = hvpaValues
 
 		overrideValues := b.OverrideHelmValues("etcd")
+		mergedValues := utils.MergeMaps(values, overrideValues)
 
-		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values), kubernetes.Values(overrideValues)); err != nil {
+		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(mergedValues)); err != nil {
 			return err
 		}
 	}
@@ -1243,18 +1244,29 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 }
 
 func (b *Botanist) OverrideHelmValues(name string) map[string]interface{} {
-	logger := logrus.NewEntry(logger.NewNopLogger())
+	log := logrus.NewEntry(logger.NewNopLogger())
 
 	emptyValues := make(map[string]interface{})
-	values, ok := b.Config.OverrideHelmValues[name]
+
+	if b.Config.OverrideHelmValues == nil {
+		return emptyValues
+	}
+	data := b.Config.OverrideHelmValues.UnstructuredContent()
+	if len(data) == 0 {
+		return emptyValues
+	}
+
+	values, ok := data[name]
 	if !ok {
 		return emptyValues
 	}
+
 	overrideValues, ok := values.(map[string]interface{})
 	if !ok {
-		logger.Warnf("invalid override helm values in gardenlet config, values: %v", values)
+		log.Warnf("invalid override helm values in gardenlet config, values: %v", values)
 		return emptyValues
 	}
+	log.Infof("override helm values for component: %s, values: %v", name, overrideValues)
 	return overrideValues
 }
 
