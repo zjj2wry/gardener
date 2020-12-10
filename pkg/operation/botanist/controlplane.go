@@ -1231,12 +1231,41 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 		values["sidecar"] = sidecarValues
 		values["hvpa"] = hvpaValues
 
-		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(values)); err != nil {
+		overrideValues := b.OverrideHelmValues("etcd")
+		mergedValues := utils.MergeMaps(values, overrideValues)
+
+		if err := b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, "etcd"), b.Shoot.SeedNamespace, name, kubernetes.Values(mergedValues)); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (b *Botanist) OverrideHelmValues(name string) map[string]interface{} {
+	log := b.Logger
+
+	emptyValues := make(map[string]interface{})
+	if b.Config.OverrideHelmValues == nil {
+		return emptyValues
+	}
+	data := b.Config.OverrideHelmValues.UnstructuredContent()
+
+	if len(data) == 0 {
+		return emptyValues
+	}
+
+	values, ok := data[name]
+	if !ok {
+		return emptyValues
+	}
+	overrideValues, ok := values.(map[string]interface{})
+	if !ok {
+		log.Warnf("invalid override helm values in gardenlet config, values: %v", values)
+		return emptyValues
+	}
+	log.Infof("override helm values for component: %s, values: %v", name, overrideValues)
+	return overrideValues
 }
 
 // CheckVPNConnection checks whether the VPN connection between the control plane and the shoot networks

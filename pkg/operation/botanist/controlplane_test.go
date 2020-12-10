@@ -15,9 +15,15 @@
 package botanist
 
 import (
+	"testing"
+
+	"github.com/gardener/gardener/pkg/gardenlet/apis/config"
+	"github.com/gardener/gardener/pkg/operation"
+	"github.com/google/go-cmp/cmp"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	auditv1 "k8s.io/apiserver/pkg/apis/audit/v1"
 	auditv1alpha1 "k8s.io/apiserver/pkg/apis/audit/v1alpha1"
@@ -133,3 +139,69 @@ var _ = Describe("controlplane", func() {
 	)
 
 })
+
+func TestOverrideHelmValues(t *testing.T) {
+	emptyValues := make(map[string]interface{})
+	testCases := []struct {
+		name         string
+		input        *Botanist
+		expectValues map[string]interface{}
+	}{
+		{
+			name: "override helm values is null",
+			input: &Botanist{
+				Operation: &operation.Operation{
+					Config: &config.GardenletConfiguration{},
+				},
+			},
+			expectValues: emptyValues,
+		},
+		{
+			name: "override helm values is not map",
+			input: &Botanist{
+				Operation: &operation.Operation{
+					Config: &config.GardenletConfiguration{
+						OverrideHelmValues: &unstructured.Unstructured{
+							Object: map[string]interface{}{
+								"etcd": "i am string",
+							},
+						},
+					},
+				},
+			},
+			expectValues: emptyValues,
+		},
+		{
+			name: "add extra annotations to etcd service account",
+			input: &Botanist{
+				Operation: &operation.Operation{
+					Config: &config.GardenletConfiguration{
+						OverrideHelmValues: &unstructured.Unstructured{
+							Object: map[string]interface{}{
+								"etcd": map[string]interface{}{
+									"serviceAccountAnnotations": map[string]interface{}{
+										"eks.amazonaws.com/role-arn": "role-id",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expectValues: map[string]interface{}{
+				"serviceAccountAnnotations": map[string]interface{}{
+					"eks.amazonaws.com/role-arn": "role-id",
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			overrideValues := testCase.input.OverrideHelmValues("etcd")
+			if diff := cmp.Diff(overrideValues, testCase.expectValues); diff != "" {
+				t.Fatalf("diff: %s", diff)
+			}
+		})
+	}
+}

@@ -26,6 +26,7 @@ import (
 	config "github.com/gardener/gardener/pkg/gardenlet/apis/config"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	unstructured "k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	configv1alpha1 "k8s.io/component-base/config/v1alpha1"
@@ -430,6 +431,7 @@ func autoConvert_v1alpha1_GardenletConfiguration_To_config_GardenletConfiguratio
 	out.FeatureGates = *(*map[string]bool)(unsafe.Pointer(&in.FeatureGates))
 	out.SeedConfig = (*config.SeedConfig)(unsafe.Pointer(in.SeedConfig))
 	out.SeedSelector = (*v1.LabelSelector)(unsafe.Pointer(in.SeedSelector))
+	out.OverrideHelmValues = (*unstructured.Unstructured)(unsafe.Pointer(in.OverrideHelmValues))
 	return nil
 }
 
@@ -490,6 +492,7 @@ func autoConvert_config_GardenletConfiguration_To_v1alpha1_GardenletConfiguratio
 	out.FeatureGates = *(*map[string]bool)(unsafe.Pointer(&in.FeatureGates))
 	out.SeedConfig = (*SeedConfig)(unsafe.Pointer(in.SeedConfig))
 	out.SeedSelector = (*v1.LabelSelector)(unsafe.Pointer(in.SeedSelector))
+	out.OverrideHelmValues = (*unstructured.Unstructured)(unsafe.Pointer(in.OverrideHelmValues))
 	return nil
 }
 

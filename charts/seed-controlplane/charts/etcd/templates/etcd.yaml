@@ -75,6 +75,7 @@ spec:
 {{- if .Values.storageClass }}
   storageClass: {{ .Values.storageClass }}
 {{- end }}
+  serviceAccount: etcd
   storageCapacity: {{ .Values.storageCapacity }}
 {{- if eq .Values.role "main" }}
   volumeClaimTemplate: {{ .Values.role }}-etcd
