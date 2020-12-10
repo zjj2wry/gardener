@@ -40,10 +40,10 @@ import (
 	"github.com/gardener/gardener/pkg/logger"
 	gardenerutils "github.com/gardener/gardener/pkg/utils"
 	"github.com/gardener/gardener/pkg/version"
-
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/client-go/discovery"
@@ -105,7 +105,11 @@ func (o *Options) loadConfigFromFile(file string) (*config.GardenletConfiguratio
 
 // decodeConfig decodes data as a GardenletConfiguration object.
 func (o *Options) decodeConfig(data []byte) (*config.GardenletConfiguration, error) {
-	gardenletConfig := &config.GardenletConfiguration{}
+	gardenletConfig := &config.GardenletConfiguration{
+		OverrideHelmValues: &unstructured.Unstructured{
+			Object: make(map[string]interface{}),
+		},
+	}
 	if _, _, err := o.codecs.UniversalDecoder().Decode(data, nil, gardenletConfig); err != nil {
 		return nil, err
 	}

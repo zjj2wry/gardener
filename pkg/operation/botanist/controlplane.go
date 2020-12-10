@@ -28,7 +28,6 @@ import (
 	"github.com/gardener/gardener/pkg/client/kubernetes"
 	"github.com/gardener/gardener/pkg/features"
 	gardenletfeatures "github.com/gardener/gardener/pkg/gardenlet/features"
-	"github.com/gardener/gardener/pkg/logger"
 	"github.com/gardener/gardener/pkg/operation/common"
 	"github.com/gardener/gardener/pkg/utils"
 	"github.com/gardener/gardener/pkg/utils/flow"
@@ -1244,14 +1243,14 @@ func (b *Botanist) DeployETCD(ctx context.Context) error {
 }
 
 func (b *Botanist) OverrideHelmValues(name string) map[string]interface{} {
-	log := logrus.NewEntry(logger.NewNopLogger())
+	log := b.Logger
 
 	emptyValues := make(map[string]interface{})
-
 	if b.Config.OverrideHelmValues == nil {
 		return emptyValues
 	}
 	data := b.Config.OverrideHelmValues.UnstructuredContent()
+
 	if len(data) == 0 {
 		return emptyValues
 	}
@@ -1260,7 +1259,6 @@ func (b *Botanist) OverrideHelmValues(name string) map[string]interface{} {
 	if !ok {
 		return emptyValues
 	}
-
 	overrideValues, ok := values.(map[string]interface{})
 	if !ok {
 		log.Warnf("invalid override helm values in gardenlet config, values: %v", values)
