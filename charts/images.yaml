@@ -18,9 +18,10 @@ images:
   repository: gcr.io/google_containers/pause-amd64
   tag: "3.1"
 - name: etcd-druid
-  sourceRepository: github.com/gardener/etcd-druid
-  repository: eu.gcr.io/gardener-project/gardener/etcd-druid
-  tag: "v0.2.0"
+  sourceRepository: github.com/tidbcloud/etcd-druid
+  repository: gcr.io/pingcap-public/gardener/etcd-druid
+  tag: "v0.2.1.pingcap"
+
 - name: gardener-resource-manager
   sourceRepository: github.com/gardener/gardener-resource-manager
   repository: eu.gcr.io/gardener-project/gardener/gardener-resource-manager
