@@ -15,6 +15,8 @@
 package helper
 
 import (
+	"fmt"
+
 	"github.com/gardener/gardener/pkg/gardenlet/apis/config"
 )
 
@@ -25,4 +27,27 @@ func SeedNameFromSeedConfig(seedConfig *config.SeedConfig) string {
 		return ""
 	}
 	return seedConfig.Seed.Name
+}
+
+func GetOverrideHelmValues(conf *config.GardenletConfiguration, compName string) (map[string]interface{}, error) {
+
+	emptyValues := make(map[string]interface{})
+	if conf.OverrideHelmValues == nil {
+		return emptyValues, nil
+	}
+	data := conf.OverrideHelmValues.UnstructuredContent()
+
+	if len(data) == 0 {
+		return emptyValues, nil
+	}
+
+	values, ok := data[compName]
+	if !ok {
+		return emptyValues, nil
+	}
+	overrideValues, ok := values.(map[string]interface{})
+	if !ok {
+		return emptyValues, fmt.Errorf("invalid override helm values in gardenlet config, values: %v", values)
+	}
+	return overrideValues, nil
 }

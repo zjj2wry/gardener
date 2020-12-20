@@ -31,6 +31,7 @@ import (
 	"github.com/gardener/gardener/pkg/client/kubernetes"
 	"github.com/gardener/gardener/pkg/controllerutils"
 	"github.com/gardener/gardener/pkg/gardenlet/apis/config"
+	gardenlethelper "github.com/gardener/gardener/pkg/gardenlet/apis/config/helper"
 	"github.com/gardener/gardener/pkg/logger"
 	seedpkg "github.com/gardener/gardener/pkg/operation/seed"
 	"github.com/gardener/gardener/pkg/utils"
@@ -241,6 +242,14 @@ func (c *defaultControllerInstallationControl) reconcile(controllerInstallation 
 				"spec":            seed.Spec,
 			},
 		},
+	}
+
+	// Mix-in seed-specific overrides
+	override, err := gardenlethelper.GetOverrideHelmValues(c.config, controllerRegistration.Name)
+	if err != nil {
+		logger.Warningf("err get override values for %s, err: %+v", controllerRegistration.Name, err)
+	} else {
+		gardenerValues = utils.MergeMaps(gardenerValues, override)
 	}
 
 	release, err := chartRenderer.RenderArchive(helmDeployment.Chart, controllerRegistration.Name, namespace.Name, utils.MergeMaps(helmDeployment.Values, gardenerValues))
