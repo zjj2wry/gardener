@@ -111,6 +111,7 @@ global:
       featureGates: {}
     # seedSelector: {}
     # seedConfig: {}
+    # overrideHelmValues: {}
   # Deployment related configuration
   deployment:
     virtualGarden:

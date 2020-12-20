@@ -132,4 +132,8 @@ data:
     seedConfig:
 {{ toYaml .Values.global.gardenlet.config.seedConfig | indent 6 }}
     {{- end }}
+    {{- if .Values.global.gardenlet.config.overrideHelmValues }}
+    overrideHelmValues:
+{{ toYaml .Values.global.gardenlet.config.overrideHelmValues | indent 6 }}
+    {{- end }}
 {{- end }}
