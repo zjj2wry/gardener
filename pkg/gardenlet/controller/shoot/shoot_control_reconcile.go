@@ -453,7 +453,7 @@ func (c *Controller) updateShootStatusReconcileSuccess(o *operation.Operation, o
 		func(shoot *gardencorev1beta1.Shoot) (*gardencorev1beta1.Shoot, error) {
 			shoot.Status.RetryCycleStartTime = nil
 			shoot.Status.SeedName = &o.Seed.Info.Name
-			shoot.Status.InfrastructureProviderStatus =  &runtime.RawExtension{
+			shoot.Status.InfrastructureProviderStatus = &runtime.RawExtension{
 				Raw: o.Shoot.InfrastructureStatus,
 			}
 			shoot.Status.IsHibernated = o.Shoot.HibernationEnabled
