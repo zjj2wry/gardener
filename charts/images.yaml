@@ -20,7 +20,7 @@ images:
 - name: etcd-druid
   sourceRepository: github.com/tidbcloud/etcd-druid
   repository: gcr.io/pingcap-public/gardener/etcd-druid
-  tag: "v0.2.1.pingcap"
+  tag: "v0.2.3"
 
 - name: gardener-resource-manager
   sourceRepository: github.com/gardener/gardener-resource-manager
