@@ -23,9 +23,9 @@ images:
   tag: "v0.2.3"
 
 - name: gardener-resource-manager
-  sourceRepository: github.com/gardener/gardener-resource-manager
-  repository: eu.gcr.io/gardener-project/gardener/gardener-resource-manager
-  tag: "v0.12.0"
+  sourceRepository: github.com/tidbcloud/gardener-resource-manager
+  repository: gcr.io/pingcap-public/gardener/gardener-resource-manager
+  tag: "v0.12.0-pingcap.1"
 - name: dependency-watchdog
   sourceRepository: github.com/gardener/dependency-watchdog
   repository: eu.gcr.io/gardener-project/gardener/dependency-watchdog
