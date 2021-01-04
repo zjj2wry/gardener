@@ -1045,7 +1045,10 @@ func (b *Botanist) DeployKubeControllerManager(ctx context.Context) error {
 		return err
 	}
 
-	return b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, v1beta1constants.DeploymentNameKubeControllerManager), b.Shoot.SeedNamespace, v1beta1constants.DeploymentNameKubeControllerManager, kubernetes.Values(values))
+	overrideValues := b.OverrideHelmValues("kube-controller-manager")
+	mergedValues := utils.MergeMaps(values, overrideValues)
+
+	return b.ChartApplierSeed.Apply(ctx, filepath.Join(chartPathControlPlane, v1beta1constants.DeploymentNameKubeControllerManager), b.Shoot.SeedNamespace, v1beta1constants.DeploymentNameKubeControllerManager, kubernetes.Values(mergedValues))
 }
 
 // DeployKubeScheduler deploys kube-scheduler deployment.

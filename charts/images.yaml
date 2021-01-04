@@ -45,7 +45,8 @@ images:
   targetVersion: ">= 1.17"
 - name: kube-controller-manager
   sourceRepository: github.com/kubernetes/kubernetes
-  repository: k8s.gcr.io/hyperkube
+  repository: gcr.io/pingcap-public/k8s/hyperkube
+  tag: "v1.16.17"
   targetVersion: "< 1.17"
 - name: kube-controller-manager
   sourceRepository: github.com/kubernetes/kubernetes

@@ -31,6 +31,7 @@ spec:
 {{ toYaml .Values.podLabels | indent 8 }}
 {{- end }}
     spec:
+      serviceAccountName: kube-controller-manager
       tolerations:
       - effect: NoExecute
         operator: Exists
