@@ -19,6 +19,9 @@ horizontalPodAutoscaler:
   readinessDelay: 30s
   cpuInitializationPeriod: 5m0s
 
+# serviceAccountAnnotations:
+#   a: b
+
 resources:
   requests:
     cpu: 100m
