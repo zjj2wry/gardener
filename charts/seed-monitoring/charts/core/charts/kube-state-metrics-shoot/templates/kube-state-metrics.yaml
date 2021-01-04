@@ -69,7 +69,7 @@ spec:
         - --port=8080
         - --telemetry-port=8081
         - --kubeconfig=/etc/kube-state-metrics/config/kubeconfig
-        - --collectors=daemonsets,deployments,nodes,pods,statefulsets
+        - --collectors=daemonsets,deployments,nodes,pods,statefulsets,jobs,horizontalpodautoscalers,resourcequotas,cronjobs,replicasets
         volumeMounts:
         - name: kubeconfig
           mountPath: /etc/kube-state-metrics/config
