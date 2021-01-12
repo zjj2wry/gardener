@@ -86,6 +86,159 @@ data:
         regex: true
         action: drop
     scrape_configs:
+    - job_name: cert-manager
+      honor_timestamps: true
+      scrape_interval: 1m
+      scrape_timeout: 30s
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+      - role: endpoints
+        api_server: https://kube-apiserver:443
+        tls_config:
+{{ include "prometheus.tls-config.kube-cert-auth" . | indent 10 }}
+        namespaces:
+          names:
+          - cert-manager
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_component]
+        separator: ;
+        regex: controller
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_instance]
+        separator: ;
+        regex: cert-manager
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_name]
+        separator: ;
+        regex: cert-manager
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        separator: ;
+        regex: "9402"
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Node;(.*)
+        target_label: node
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Pod;(.*)
+        target_label: pod
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_name]
+        separator: ;
+        regex: (.*)
+        target_label: pod
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: job
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_service_label_cert_manager]
+        separator: ;
+        regex: (.+)
+        target_label: job
+        replacement: ${1}
+        action: replace
+      - separator: ;
+        regex: (.*)
+        target_label: endpoint
+        replacement: "9402"
+        action: replace
+  
+    - job_name: fluent-bit-loki
+      honor_timestamps: true
+      scrape_interval: 30s
+      scrape_timeout: 10s
+      metrics_path: /api/v1/metrics/prometheus
+      kubernetes_sd_configs:
+      - role: endpoints
+        api_server: https://kube-apiserver:443
+        tls_config:
+{{ include "prometheus.tls-config.kube-cert-auth" . | indent 10 }}
+        namespaces:
+          names:
+          - logging
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_label_app]
+        separator: ;
+        regex: fluent-bit-loki
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_service_label_release]
+        separator: ;
+        regex: loki
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        separator: ;
+        regex: http-metrics
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Node;(.*)
+        target_label: node
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Pod;(.*)
+        target_label: pod
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_name]
+        separator: ;
+        regex: (.*)
+        target_label: pod
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: job
+        replacement: ${1}
+        action: replace
+      - separator: ;
+        regex: (.*)
+        target_label: endpoint
+        replacement: http-metrics
+        action: replace
+
     - job_name: tidb-monitor
       metrics_path: /federate
       scrape_timeout: 30s
