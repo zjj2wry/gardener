@@ -61,8 +61,8 @@ spec:
             cpu: 20m
             memory: 100Mi
           limits:
-            cpu: 100m
-            memory: 1Gi
+            cpu: 80m
+            memory: 100Mi
         volumeMounts:
         - name: metrics-server
           mountPath: /srv/metrics-server/tls
