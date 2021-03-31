@@ -34,11 +34,13 @@ data:
         # samples from the WAL. It is recommended to have enough capacity in each
         # shard to buffer several requests to keep throughput up while processing
         # occasional slow remote requests.
-        capacity: 2500
+        capacity: 5000
         # Maximum number of shards, i.e. amount of concurrency.
-        max_shards: 200
+        max_shards: 50
         # Maximum number of samples per send.
         max_samples_per_send: 500
+      metadata_config:
+        send: false
     rule_files:
     - /etc/prometheus/rules/*.yaml
     alerting:
