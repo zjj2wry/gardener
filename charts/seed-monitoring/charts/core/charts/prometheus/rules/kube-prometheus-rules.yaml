@@ -889,7 +889,7 @@ groups:
   - alert: KubePodCrashLooping
     annotations:
       message: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container
-        }}) is restarting {{ printf "%.2f" $value }} times / 5 minutes.
+        }}) is restarting {{ printf "%.2f" $value }} times in 1 hours.
       runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping
     expr: |
       increase(kube_pod_container_status_restarts_total[1h]) > 5
