@@ -892,8 +892,8 @@ groups:
         }}) is restarting {{ printf "%.2f" $value }} times / 5 minutes.
       runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping
     expr: |
-      increase(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[5m]) > 0
-    for: 15m
+      increase(kube_pod_container_status_restarts_total[1h]) > 5
+    for: 10m
     labels:
       severity: critical
   - alert: KubePodNotReady
@@ -1048,7 +1048,7 @@ groups:
         than one hour to complete.
       runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubejobcompletion
     expr: |
-      kube_job_spec_completions{job="kube-state-metrics"} - kube_job_status_succeeded{job="kube-state-metrics"}  > 0
+      kube_job_spec_completions{job="kube-state-metrics"} - kube_job_status_succeeded{job="kube-state-metrics"} > 0 and time()-kube_job_created < 3600*24
     for: 1h
     labels:
       severity: warning
@@ -1057,7 +1057,7 @@ groups:
       message: Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete.
       runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubejobfailed
     expr: |
-      kube_job_status_failed{job="kube-state-metrics"}  > 0
+      kube_job_status_failed{job="kube-state-metrics"}  > 0 and time()-kube_job_created < 3600*24
     for: 15m
     labels:
       severity: warning
