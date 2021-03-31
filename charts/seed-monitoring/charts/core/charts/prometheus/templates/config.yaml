@@ -39,8 +39,8 @@ data:
         max_shards: 50
         # Maximum number of samples per send.
         max_samples_per_send: 500
-    metadata_config:
-      send: false
+      metadata_config:
+        send: false
     rule_files:
     - /etc/prometheus/rules/*.yaml
     alerting:
