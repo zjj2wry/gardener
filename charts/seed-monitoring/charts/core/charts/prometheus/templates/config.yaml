@@ -635,8 +635,6 @@ data:
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels: [ __meta_kubernetes_pod_name ]
         target_label: pod
-      metric_relabel_configs:
-{{ include "prometheus.keep-metrics.metric-relabel-config" .Values.allowedMetrics.coredns | indent 6 }}
 
     - job_name: node-exporter
       honor_labels: false
